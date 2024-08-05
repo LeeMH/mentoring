@@ -1,32 +1,24 @@
 package me.mhlee.demo.common;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public enum RiderTransportation {
-    WALK,
-    BICYCLE,
-    MOTORBIKE,
-    CAR;
+    WALK(1f),
+    BICYCLE(2.5f),
+    MOTORBIKE(4f),
+    CAR(5f);
+
+    private final float maxDistanceKm;
+
+    RiderTransportation(float maxDistanceKm) {
+        this.maxDistanceKm = maxDistanceKm;
+    }
 
     public static List<RiderTransportation> getAvailableTransportation(float distanceKm) {
-        List<RiderTransportation> result = new ArrayList<>();
-        if (distanceKm <= 1) {
-            result.add(RiderTransportation.WALK);
-            result.add(RiderTransportation.BICYCLE);
-            result.add(RiderTransportation.MOTORBIKE);
-            result.add(RiderTransportation.CAR);
-        } else if (distanceKm <= 2.5) {
-            result.add(RiderTransportation.BICYCLE);
-            result.add(RiderTransportation.MOTORBIKE);
-            result.add(RiderTransportation.CAR);
-        } else if (distanceKm < 4) {
-            result.add(RiderTransportation.MOTORBIKE);
-            result.add(RiderTransportation.CAR);
-        } else if (distanceKm <= 5) {
-            result.add(RiderTransportation.CAR);
-        }
-
-        return result;
+        return Arrays.stream(RiderTransportation.values())
+                .filter(it -> it.maxDistanceKm >= distanceKm)
+                .collect(Collectors.toList());
     }
 }
