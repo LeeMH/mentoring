@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/waguwagu_junit?createDatabaseIfNotExist=true&tinyInt1isBit=false&useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: hello
+    password: world
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        query:
+          substitutions: true
+    defer-datasource-initialization: true
+logging:
+  level:
+    root: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.SQL: TRACE
