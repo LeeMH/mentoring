@@ -9,7 +9,7 @@ public enum RiderTransportation {
     MOTORBIKE,
     CAR;
 
-    public List<RiderTransportation> getAvailableTransportation(float distanceKm) {
+    public static List<RiderTransportation> getAvailableTransportation(float distanceKm) {
         List<RiderTransportation> result = new ArrayList<>();
         if (distanceKm <= 1) {
             result.add(RiderTransportation.WALK);
