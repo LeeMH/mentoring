@@ -65,6 +65,14 @@ public class Users {
     }
 
     public static Users of(String loginId, String encodedPassword, String name, int age) {
+        if (StringUtils.length(name) > Users.MAX_NAME_LENGTH) {
+            throw new ApiException("이름은 최대 16자 까지 입력 가능 합니다.");
+        }
+
+        if (age < Users.MIN_AGE || age > Users.MAX_AGE) {
+            throw new ApiException(String.format("%s ~ %s 사이만 가입 가능 합니다.", Users.MIN_AGE, Users.MAX_AGE));
+        }
+
         return Users.builder()
                 .loginId(loginId)
                 .password(encodedPassword)
