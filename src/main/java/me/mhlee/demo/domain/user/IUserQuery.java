@@ -8,4 +8,5 @@ public interface IUserQuery {
 
     @Nullable Users.Vo findByLoginId(String loginId);
     Users.Vo getByLoginId(String loginId);
+    UserParam.UserAndPoint getByLoginIdWithPoint(Long userId);
 }

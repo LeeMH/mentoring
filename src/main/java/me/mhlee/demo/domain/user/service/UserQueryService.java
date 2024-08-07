@@ -3,11 +3,10 @@ package me.mhlee.demo.domain.user.service;
 
 import lombok.AllArgsConstructor;
 import me.mhlee.demo.common.exceptions.ApiException;
+import me.mhlee.demo.common.exceptions.ErrorCode;
 import me.mhlee.demo.domain.QueryService;
-import me.mhlee.demo.domain.user.IUserQuery;
-import me.mhlee.demo.domain.user.QUsers;
-import me.mhlee.demo.domain.user.UserRepository;
-import me.mhlee.demo.domain.user.Users;
+import me.mhlee.demo.domain.point.QPoints;
+import me.mhlee.demo.domain.user.*;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,5 +58,28 @@ public class UserQueryService extends QueryService implements IUserQuery  {
         }
 
         return user;
+    }
+
+    @Override
+    public UserParam.UserAndPoint getByLoginIdWithPoint(Long userId) {
+        var qUser = QUsers.users;
+        var qPoint = QPoints.points;
+
+        var where = where()
+                .and(qUser.id.eq(userId));
+
+        var row = query().select(qUser, qPoint)
+                .from(qUser)
+                .join(qPoint).on(qUser.id.eq(qPoint.userId))
+                .where(where)
+                .fetchOne();
+
+        if (row == null) {
+            throw new ApiException(ErrorCode.NOT_FOUND_USER_ID.toMessage(userId));
+        }
+
+        return new UserParam.UserAndPoint()
+                .setUser(row.get(qUser).toVo())
+                .setPoint(row.get(qPoint).toVo());
     }
 }
