@@ -3,6 +3,8 @@ package me.mhlee.demo.domain.user;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
+import me.mhlee.demo.common.exceptions.ApiException;
+import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -45,6 +47,22 @@ public class Users {
     @Version
     @Column(name = "version", nullable = false)
     private long version;
+
+    public void setName(String name) {
+        if (StringUtils.length(name) > Users.MAX_NAME_LENGTH) {
+            throw new ApiException("이름은 최대 16자 까지 입력 가능 합니다.");
+        }
+
+        this.name = name;
+    }
+
+    public void setAge(int age) {
+        if (age < Users.MIN_AGE || age > Users.MAX_AGE) {
+            throw new ApiException(String.format("%s ~ %s 사이만 가입 가능 합니다.", Users.MIN_AGE, Users.MAX_AGE));
+        }
+
+        this.age = age;
+    }
 
     public static Users of(String loginId, String encodedPassword, String name, int age) {
         return Users.builder()

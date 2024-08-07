@@ -24,24 +24,12 @@ public class UserService implements IUser {
             throw new ApiException("이미 존재하는 ID 입니다.");
         }
 
-        if (StringUtils.length(name) > Users.MAX_NAME_LENGTH) {
-            throw new ApiException("이름은 최대 16자 까지 입력 가능 합니다.");
-        }
-
-        if (age < Users.MIN_AGE || age > Users.MAX_AGE) {
-            throw new ApiException(String.format("%s ~ %s 사이만 가입 가능 합니다.", Users.MIN_AGE, Users.MAX_AGE));
-        }
-
         var user = Users.of(loginId, encodedPassword, name, age);
         return repository.save(user).toVo();
     }
 
     @Override
     public Users.Vo updateName(Long userId, String name) {
-        if (StringUtils.length(name) > Users.MAX_NAME_LENGTH) {
-            throw new ApiException("이름은 최대 16자 까지 입력 가능 합니다.");
-        }
-
         var user = getById(userId);
         user.setName(name);
         return repository.save(user).toVo();
@@ -49,10 +37,6 @@ public class UserService implements IUser {
 
     @Override
     public Users.Vo updateAge(Long userId, int age) {
-        if (age < Users.MIN_AGE || age > Users.MAX_AGE) {
-            throw new ApiException(String.format("%s ~ %s 사이만 가입 가능 합니다.", Users.MIN_AGE, Users.MAX_AGE));
-        }
-
         var user = getById(userId);
         user.setAge(age);
         return repository.save(user).toVo();
