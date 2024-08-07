@@ -1,5 +1,8 @@
 package me.mhlee.demo.common.exceptions;
 
+import lombok.Getter;
+
+@Getter
 public enum ErrorCode {
 
     DUPLICATED_LOGIN_ID("[U0001]", "중복된 아이디가 존재 합니다. [ID=%s]"),

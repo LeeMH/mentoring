@@ -3,6 +3,7 @@ package me.mhlee.demo.domain.user.service;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import me.mhlee.demo.common.exceptions.ApiException;
+import me.mhlee.demo.common.exceptions.ErrorCode;
 import me.mhlee.demo.domain.user.IUser;
 import me.mhlee.demo.domain.user.IUserQuery;
 import me.mhlee.demo.domain.user.UserRepository;
@@ -21,7 +22,7 @@ public class UserService implements IUser {
     public Users.Vo create(String loginId, String encodedPassword, String name, int age) {
         var duplicated = queryService.findByLoginId(loginId);
         if (duplicated != null) {
-            throw new ApiException("이미 존재하는 ID 입니다.");
+            throw new ApiException(ErrorCode.DUPLICATED_LOGIN_ID.toMessage(loginId));
         }
 
         var user = Users.of(loginId, encodedPassword, name, age);

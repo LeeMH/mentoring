@@ -2,12 +2,14 @@ package me.mhlee.demo.domain.user.service;
 
 import me.mhlee.demo.BaseTest;
 import me.mhlee.demo.common.exceptions.ApiException;
+import me.mhlee.demo.common.exceptions.ErrorCode;
 import me.mhlee.demo.domain.user.IUser;
 import me.mhlee.demo.domain.user.IUserQuery;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -35,10 +37,10 @@ class UserServiceTest extends BaseTest {
             sut.create(duplicatedLoginId, "test1234", "임꺽정", 30);
         });
 
-        log.info("ex => {}", ex.getMessage());
+        log.info("ex => {}", ex);
 
-        assertTrue(ex != null);
-        assertTrue(ex.getMessage().contains("존재"));
+        assertThat(ex).isNotNull();
+        assertThat(ex.getMessage()).startsWith(ErrorCode.DUPLICATED_LOGIN_ID.getCode());
     }
 
     @Test
@@ -48,10 +50,10 @@ class UserServiceTest extends BaseTest {
             sut.create("newId", "test1234", "임꺽정", 18);
         });
 
-        log.info("ex => {}", ex.getMessage());
+        log.info("ex => {}", ex);
 
-        assertTrue(ex != null);
-        assertTrue(ex.getMessage().contains("사이만"));
+        assertThat(ex).isNotNull();
+        assertThat(ex.getMessage()).startsWith(ErrorCode.OUT_OF_AGE_RANGE.getCode());
     }
 
     @Test
@@ -61,9 +63,9 @@ class UserServiceTest extends BaseTest {
             sut.create("newId", "test1234", "임꺽정", 71);
         });
 
-        log.info("ex => {}", ex.getMessage());
+        log.info("ex => {}", ex);
 
-        assertTrue(ex != null);
-        assertTrue(ex.getMessage().contains("사이만"));
+        assertThat(ex).isNotNull();
+        assertThat(ex.getMessage()).startsWith(ErrorCode.OUT_OF_AGE_RANGE.getCode());
     }
 }
