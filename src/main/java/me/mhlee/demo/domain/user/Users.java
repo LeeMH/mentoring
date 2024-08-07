@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
 import me.mhlee.demo.common.exceptions.ApiException;
+import me.mhlee.demo.common.exceptions.ErrorCode;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Timestamp;
@@ -50,7 +51,7 @@ public class Users {
 
     public void setName(String name) {
         if (StringUtils.length(name) > Users.MAX_NAME_LENGTH) {
-            throw new ApiException("이름은 최대 16자 까지 입력 가능 합니다.");
+            throw new ApiException(ErrorCode.EXCEEDED_NAME_LENGTH.toMessage(Users.MAX_NAME_LENGTH));
         }
 
         this.name = name;
@@ -58,7 +59,7 @@ public class Users {
 
     public void setAge(int age) {
         if (age < Users.MIN_AGE || age > Users.MAX_AGE) {
-            throw new ApiException(String.format("%s ~ %s 사이만 가입 가능 합니다.", Users.MIN_AGE, Users.MAX_AGE));
+            throw new ApiException(ErrorCode.OUT_OF_AGE_RANGE.toMessage(Users.MIN_AGE, Users.MAX_AGE));
         }
 
         this.age = age;
@@ -66,11 +67,11 @@ public class Users {
 
     public static Users of(String loginId, String encodedPassword, String name, int age) {
         if (StringUtils.length(name) > Users.MAX_NAME_LENGTH) {
-            throw new ApiException("이름은 최대 16자 까지 입력 가능 합니다.");
+            throw new ApiException(ErrorCode.EXCEEDED_NAME_LENGTH.toMessage(Users.MAX_NAME_LENGTH));
         }
 
         if (age < Users.MIN_AGE || age > Users.MAX_AGE) {
-            throw new ApiException(String.format("%s ~ %s 사이만 가입 가능 합니다.", Users.MIN_AGE, Users.MAX_AGE));
+            throw new ApiException(ErrorCode.OUT_OF_AGE_RANGE.toMessage(Users.MIN_AGE, Users.MAX_AGE));
         }
 
         return Users.builder()
