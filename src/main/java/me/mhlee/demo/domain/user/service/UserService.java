@@ -28,6 +28,14 @@ public class UserService implements IUser {
             throw new ApiException("이미 존재하는 ID 입니다.");
         }
 
+        if (StringUtils.length(name) > MAX_NAME_LENGTH) {
+            throw new ApiException("이름은 최대 16자 까지 입력 가능 합니다.");
+        }
+
+        if (age < MIN_AGE || age > MAX_AGE) {
+            throw new ApiException(String.format("%s ~ %s 사이만 가입 가능 합니다.", MIN_AGE, MAX_AGE));
+        }
+
         var user = Users.of(loginId, encodedPassword, name, age);
         return repository.save(user).toVo();
     }
