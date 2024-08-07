@@ -2,6 +2,7 @@ package me.mhlee.demo.domain.point_history;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -59,6 +60,28 @@ public class PointHistory {
         Type(String desc) {
             this.desc = desc;
         }
+    }
+
+    @Getter
+    @Setter
+    @Accessors(chain = true)
+    public class Vo {
+        private Long id;
+        private Long userId;
+        private Type type;
+        private Long amount;
+        private Long balance;
+        private Timestamp createdAt;
+    }
+
+    public Vo toVo() {
+        return new Vo()
+                .setId(id)
+                .setUserId(userId)
+                .setType(type)
+                .setAmount(amount)
+                .setBalance(balance)
+                .setCreatedAt(createdAt);
     }
 }
 
