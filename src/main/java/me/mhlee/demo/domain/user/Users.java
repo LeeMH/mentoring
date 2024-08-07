@@ -1,10 +1,8 @@
 package me.mhlee.demo.domain.user;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -12,6 +10,7 @@ import java.time.Instant;
 @Entity
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "USERS")
@@ -52,5 +51,27 @@ public class Users {
                 .createdAt(Timestamp.from(Instant.now()))
                 .updatedAt(Timestamp.from(Instant.now()))
                 .build();
+    }
+
+    @Getter
+    @Setter
+    @Accessors(chain = true)
+    public class Vo {
+        private Long id;
+        private String loginId;
+        private String name;
+        private int age;
+        private Timestamp createdAt;
+        private Timestamp updatedAt;
+    }
+
+    public Vo toVo() {
+        return new Vo()
+                .setId(id)
+                .setLoginId(loginId)
+                .setName(name)
+                .setAge(age)
+                .setCreatedAt(createdAt)
+                .setUpdatedAt(updatedAt);
     }
 }
