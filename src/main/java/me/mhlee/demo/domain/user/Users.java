@@ -15,6 +15,10 @@ import java.time.Instant;
 @AllArgsConstructor
 @Table(name = "USERS")
 public class Users {
+    public static final int MAX_NAME_LENGTH = 16;
+    public static final int MIN_AGE = 19;
+    public static final int MAX_AGE = 70;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

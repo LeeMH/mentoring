@@ -17,10 +17,6 @@ public class UserService implements IUser {
     private final UserRepository repository;
     private final IUserQuery queryService;
 
-    private static final int MAX_NAME_LENGTH = 16;
-    private static final int MIN_AGE = 19;
-    private static final int MAX_AGE = 70;
-
     @Override
     public Users.Vo create(String loginId, String encodedPassword, String name, int age) {
         var duplicated = queryService.findByLoginId(loginId);
@@ -28,12 +24,12 @@ public class UserService implements IUser {
             throw new ApiException("이미 존재하는 ID 입니다.");
         }
 
-        if (StringUtils.length(name) > MAX_NAME_LENGTH) {
+        if (StringUtils.length(name) > Users.MAX_NAME_LENGTH) {
             throw new ApiException("이름은 최대 16자 까지 입력 가능 합니다.");
         }
 
-        if (age < MIN_AGE || age > MAX_AGE) {
-            throw new ApiException(String.format("%s ~ %s 사이만 가입 가능 합니다.", MIN_AGE, MAX_AGE));
+        if (age < Users.MIN_AGE || age > Users.MAX_AGE) {
+            throw new ApiException(String.format("%s ~ %s 사이만 가입 가능 합니다.", Users.MIN_AGE, Users.MAX_AGE));
         }
 
         var user = Users.of(loginId, encodedPassword, name, age);
@@ -42,7 +38,7 @@ public class UserService implements IUser {
 
     @Override
     public Users.Vo updateName(Long userId, String name) {
-        if (StringUtils.length(name) > MAX_NAME_LENGTH) {
+        if (StringUtils.length(name) > Users.MAX_NAME_LENGTH) {
             throw new ApiException("이름은 최대 16자 까지 입력 가능 합니다.");
         }
 
@@ -53,8 +49,8 @@ public class UserService implements IUser {
 
     @Override
     public Users.Vo updateAge(Long userId, int age) {
-        if (age < MIN_AGE || age > MAX_AGE) {
-            throw new ApiException(String.format("%s ~ %s 사이만 가입 가능 합니다.", MIN_AGE, MAX_AGE));
+        if (age < Users.MIN_AGE || age > Users.MAX_AGE) {
+            throw new ApiException(String.format("%s ~ %s 사이만 가입 가능 합니다.", Users.MIN_AGE, Users.MAX_AGE));
         }
 
         var user = getById(userId);
