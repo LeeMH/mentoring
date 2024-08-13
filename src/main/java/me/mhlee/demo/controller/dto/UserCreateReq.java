@@ -30,3 +30,4 @@ public record UserCreateReq(
         @Range(min = 19, max = 70, message = "19~70세까지만 가능합니다.")
         Integer age
 ) {}
+
