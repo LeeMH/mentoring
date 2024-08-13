@@ -3,6 +3,7 @@ package me.mhlee.demo.domain.user;
 import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import me.mhlee.demo.common.Paging;
 import me.mhlee.demo.domain.point.Points;
 import org.springframework.lang.Nullable;
 
@@ -22,5 +23,7 @@ public class UserParam {
 
         @Nullable
         private Integer age;
+
+        private Paging paging = new Paging();
     }
 }

@@ -50,6 +50,9 @@ public class UserSearchService extends QueryService implements IUserSearch {
         var rows = query().select(qUsers)
                 .from(qUsers)
                 .where(where)
+                .orderBy(qUsers.id.desc())
+                .offset(param.getPaging().getOffset())
+                .limit(param.getPaging().getSize())
                 .fetch();
 
         return rows.stream()
