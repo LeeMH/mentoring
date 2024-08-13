@@ -1,6 +1,7 @@
 package me.mhlee.demo.domain.user.service;
 
 import me.mhlee.demo.BaseTest;
+import me.mhlee.demo.common.Paging;
 import me.mhlee.demo.domain.user.IUser;
 import me.mhlee.demo.domain.user.IUserSearch;
 import me.mhlee.demo.domain.user.UserParam;
@@ -72,6 +73,22 @@ class UserSearchServiceTest extends BaseTest {
         var rows = sut.search(param);
         // user의 0번째(hello)와 3번째(helloworld)가 검색되어야 한다.
         assertThat(rows.stream().anyMatch(it -> it.getLoginId().equals(users.get(0).a))).isTrue();
+        assertThat(rows.stream().anyMatch(it -> it.getLoginId().equals(users.get(2).a))).isTrue();
+    }
+
+    @Test
+    void _페이징_처리가_되어야_한다() {
+        var param = new UserParam.UserSearchParam()
+                .setName("헬로")
+                .setPaging(new Paging(0, 1));
+
+        // 전체 사이즈는 2개이다.
+        var count = sut.count(param);
+        assertThat(count).isEqualTo(2L);
+
+        // 역순으로 정렬되어 있기 때문에 마지막 데이터가 나와야 한다.
+        var rows = sut.search(param);
+        assertThat(rows.size()).isEqualTo(1L);
         assertThat(rows.stream().anyMatch(it -> it.getLoginId().equals(users.get(2).a))).isTrue();
     }
 
