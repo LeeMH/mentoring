@@ -1,5 +1,6 @@
 package me.mhlee.demo.domain.user.service;
 
+import com.querydsl.jpa.impl.JPAQuery;
 import me.mhlee.demo.domain.QueryService;
 import me.mhlee.demo.domain.user.IUserSearch;
 import me.mhlee.demo.domain.user.QUsers;
@@ -18,18 +19,9 @@ public class UserSearchService extends QueryService implements IUserSearch {
     public long count(UserParam.UserSearchParam param) {
         QUsers qUsers = QUsers.users;
 
-        var where = where();
-        if (param.getName() != null) {
-            where.and(qUsers.name.like(param.getName() + "%"));
-        }
+        var query = buildSearchQuery(qUsers, param);
 
-        if (param.getAge() != null) {
-            where.and(qUsers.age.eq(param.getAge()));
-        }
-
-        var count = query().select(qUsers.id.count())
-                .from(qUsers)
-                .where(where)
+        var count = query.select(qUsers.id.count())
                 .fetchOne();
         return (count == null) ? 0 : count;
     }
@@ -38,6 +30,20 @@ public class UserSearchService extends QueryService implements IUserSearch {
     public List<Users.Vo> search(UserParam.UserSearchParam param) {
         QUsers qUsers = QUsers.users;
 
+        var query = buildSearchQuery(qUsers, param);
+
+        var rows = query.select(qUsers)
+                .orderBy(qUsers.id.desc())
+                .offset(param.getPaging().getOffset())
+                .limit(param.getPaging().getSize())
+                .fetch();
+
+        return rows.stream()
+                .map(it -> it.toVo())
+                .toList();
+    }
+
+    private JPAQuery<?> buildSearchQuery(QUsers qUsers, UserParam.UserSearchParam param) {
         var where = where();
         if (param.getName() != null) {
             where.and(qUsers.name.like(param.getName() + "%"));
@@ -47,16 +53,9 @@ public class UserSearchService extends QueryService implements IUserSearch {
             where.and(qUsers.age.eq(param.getAge()));
         }
 
-        var rows = query().select(qUsers)
+        return query()
                 .from(qUsers)
-                .where(where)
-                .orderBy(qUsers.id.desc())
-                .offset(param.getPaging().getOffset())
-                .limit(param.getPaging().getSize())
-                .fetch();
+                .where(where);
 
-        return rows.stream()
-                .map(it -> it.toVo())
-                .toList();
     }
 }
