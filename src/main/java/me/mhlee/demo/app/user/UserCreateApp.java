@@ -22,8 +22,8 @@ public class UserCreateApp implements UserCreateUseCase {
         // 원래는 password를 해쉬화 해서 저장해야 한다!!
         // security 모듈 import
         var user = userService.create(loginId, password, name, age);
-        pointService.create(user.getId());
-        pointHistoryService.write(user.getId(), PointHistory.Type.CREATED, 0L, 0L);
+        pointService.create(user.id());
+        pointHistoryService.write(user.id(), PointHistory.Type.CREATED, 0L, 0L);
 
         return user;
     }

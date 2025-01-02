@@ -21,7 +21,7 @@ public class UserSearchApp implements UserSearchUseCase {
         var rows = userSearchService.search(param);
 
         var result = rows.stream()
-                .map(it -> new UserDto.UserSearchRes(it.getLoginId(), it.getName(), it.getAge()))
+                .map(it -> new UserDto.UserSearchRes(it.loginId(), it.name(), it.age()))
                 .toList();
 
         return new PageImpl(result, param.getPaging().getPageRequest(), count);
