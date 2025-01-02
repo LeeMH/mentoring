@@ -64,23 +64,15 @@ public class Points {
                 .build();
     }
 
-    @Getter
-    @Setter
-    @Accessors(chain = true)
-    public class Vo {
-        private Long userId;
-        private Long balance;
-        private Long beforeBalance;
-        private Timestamp createdAt;
-        private Timestamp updatedAt;
-    }
+    public record Vo(
+            Long userId,
+            Long balance,
+            Long beforeBalance,
+            Timestamp createdAt,
+            Timestamp updatedAt
+    ) { }
 
     public Vo toVo() {
-        return new Vo()
-                .setUserId(userId)
-                .setBalance(balance)
-                .setBeforeBalance(beforeBalance)
-                .setCreatedAt(createdAt)
-                .setUpdatedAt(updatedAt);
+        return new Vo(userId, balance, beforeBalance, createdAt, updatedAt);
     }
 }
