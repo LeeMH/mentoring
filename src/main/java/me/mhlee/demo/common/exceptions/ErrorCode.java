@@ -25,4 +25,8 @@ public enum ErrorCode {
     public String toMessage(Object... args) {
         return String.format(code + " " + message, args);
     }
+
+    public boolean startWithCode(String message) {
+        return message.startsWith(code);
+    }
 }
