@@ -1,10 +1,13 @@
 package me.mhlee.demo.app.user;
 
 import me.mhlee.demo.BaseTest;
+import me.mhlee.demo.common.exceptions.ApiException;
+import me.mhlee.demo.common.exceptions.ErrorCode;
 import me.mhlee.demo.domain.point.PointsRepository;
 import me.mhlee.demo.domain.point_history.PointHistory;
 import me.mhlee.demo.domain.point_history.PointHistoryRepository;
 import me.mhlee.demo.domain.user.IUserQuery;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -52,7 +55,25 @@ class UserCreateAppTest extends BaseTest {
         assertThat(historyList.get(0).getType()).isEqualTo(PointHistory.Type.CREATED);
         assertThat(historyList.get(0).getAmount()).isZero();
         assertThat(historyList.get(0).getBalance()).isZero();
+    }
 
+    @Test
+    void _동일_loginId_사용시_에러가_발생해야_한다() {
+        var loginId = "helloworld";
+        var name = "홈길동";
+        var age = 25;
+        var password = "test12434!";
+
+        // 계정 생성
+        sut.create(loginId, name, password, age);
+
+        // 동일 ID로 다시 생성시 exception이 터져야 한다.
+        var ex = Assertions.assertThrows(ApiException.class, () -> {
+            sut.create(loginId, name, password, age);
+        });
+
+        // 에러 메세지는 DUPLICATED_LOGIN_ID여야 한다.
+        Assertions.assertTrue(ErrorCode.DUPLICATED_LOGIN_ID.startWithCode(ex.getMessage()));
     }
 
 }
