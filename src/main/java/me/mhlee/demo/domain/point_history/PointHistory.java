@@ -62,26 +62,17 @@ public class PointHistory {
         }
     }
 
-    @Getter
-    @Setter
-    @Accessors(chain = true)
-    public class Vo {
-        private Long id;
-        private Long userId;
-        private Type type;
-        private Long amount;
-        private Long balance;
-        private Timestamp createdAt;
-    }
+    public record Vo(
+            Long id,
+            Long userId,
+            Type type,
+            Long amount,
+            Long balance,
+            Timestamp createdAt
+    ) { }
 
     public Vo toVo() {
-        return new Vo()
-                .setId(id)
-                .setUserId(userId)
-                .setType(type)
-                .setAmount(amount)
-                .setBalance(balance)
-                .setCreatedAt(createdAt);
+        return new Vo(id, userId, type, amount, balance, createdAt);
     }
 }
 
