@@ -84,25 +84,16 @@ public class Users {
                 .build();
     }
 
-    @Getter
-    @Setter
-    @Accessors(chain = true)
-    public class Vo {
-        private Long id;
-        private String loginId;
-        private String name;
-        private int age;
-        private Timestamp createdAt;
-        private Timestamp updatedAt;
-    }
+    public record Vo(
+            Long id,
+            String loginId,
+            String name,
+            int age,
+            Timestamp createdAt,
+            Timestamp updatedAt
+    ) { }
 
     public Vo toVo() {
-        return new Vo()
-                .setId(id)
-                .setLoginId(loginId)
-                .setName(name)
-                .setAge(age)
-                .setCreatedAt(createdAt)
-                .setUpdatedAt(updatedAt);
+        return new Vo(id, loginId, name, age, createdAt, updatedAt);
     }
 }
