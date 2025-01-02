@@ -58,8 +58,8 @@ class UserSearchServiceTest extends BaseTest {
 
         var rows = sut.search(param);
         // user의 2번째(world)와 3번째(helloworld)가 검색되어야 한다.
-        assertThat(rows.stream().anyMatch(it -> it.getLoginId().equals(users.get(1).a))).isTrue();
-        assertThat(rows.stream().anyMatch(it -> it.getLoginId().equals(users.get(2).a))).isTrue();
+        assertThat(rows.stream().anyMatch(it -> it.loginId().equals(users.get(1).a))).isTrue();
+        assertThat(rows.stream().anyMatch(it -> it.loginId().equals(users.get(2).a))).isTrue();
     }
 
     @Test
@@ -72,8 +72,8 @@ class UserSearchServiceTest extends BaseTest {
 
         var rows = sut.search(param);
         // user의 0번째(hello)와 3번째(helloworld)가 검색되어야 한다.
-        assertThat(rows.stream().anyMatch(it -> it.getLoginId().equals(users.get(0).a))).isTrue();
-        assertThat(rows.stream().anyMatch(it -> it.getLoginId().equals(users.get(2).a))).isTrue();
+        assertThat(rows.stream().anyMatch(it -> it.loginId().equals(users.get(0).a))).isTrue();
+        assertThat(rows.stream().anyMatch(it -> it.loginId().equals(users.get(2).a))).isTrue();
     }
 
     @Test
@@ -89,7 +89,7 @@ class UserSearchServiceTest extends BaseTest {
         // 역순으로 정렬되어 있기 때문에 마지막 데이터가 나와야 한다.
         var rows = sut.search(param);
         assertThat(rows.size()).isEqualTo(1L);
-        assertThat(rows.stream().anyMatch(it -> it.getLoginId().equals(users.get(2).a))).isTrue();
+        assertThat(rows.stream().anyMatch(it -> it.loginId().equals(users.get(2).a))).isTrue();
     }
 
     @Test
@@ -105,6 +105,6 @@ class UserSearchServiceTest extends BaseTest {
         // 역순으로 정렬되어 있기 때문에 첫번째 데이터가 나와야 한다.
         var rows = sut.search(param);
         assertThat(rows.size()).isEqualTo(1L);
-        assertThat(rows.stream().anyMatch(it -> it.getLoginId().equals(users.get(0).a))).isTrue();
+        assertThat(rows.stream().anyMatch(it -> it.loginId().equals(users.get(0).a))).isTrue();
     }
 }

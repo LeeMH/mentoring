@@ -34,19 +34,19 @@ class UserCreateAppTest extends BaseTest {
         var user = sut.create(loginId, name, password, age);
 
         // user 검증
-        assertThat(user.getLoginId()).isEqualTo(loginId);
-        assertThat(user.getName()).isEqualTo(name);
-        assertThat(user.getAge()).isEqualTo(age);
+        assertThat(user.loginId()).isEqualTo(loginId);
+        assertThat(user.name()).isEqualTo(name);
+        assertThat(user.age()).isEqualTo(age);
 
         // 포인트 원장 생성 확인
-        var point = pointsRepository.getReferenceById(user.getId());
+        var point = pointsRepository.getReferenceById(user.id());
         assertThat(point).isNotNull();
         assertThat(point.getBalance()).isZero();
         assertThat(point.getBeforeBalance()).isZero();
 
         // 포인트 히스토리 검증
         var historyList = pointHistoryRepository.findAll().stream()
-                .filter(it -> it.getUserId().equals(user.getId()))
+                .filter(it -> it.getUserId().equals(user.id()))
                 .toList();
         assertThat(historyList.size()).isEqualTo(1);
         assertThat(historyList.get(0).getType()).isEqualTo(PointHistory.Type.CREATED);
